@@ -4,11 +4,10 @@ internal class RgArgumentsInfo : ArgumentsInfo
 {
     #region Methods
 
-    internal RgArgumentsInfo(string pattern, string args, bool singleQmarks = false) : this(
+    internal RgArgumentsInfo(string pattern, string args) : this(
         pattern,
         UToolsUtil.DataPath,
-        args,
-        singleQmarks
+        args
     )
     {
     }
@@ -20,8 +19,7 @@ internal class RgArgumentsInfo : ArgumentsInfo
     internal RgArgumentsInfo(
         string pattern,
         string workDir,
-        string exArgs,
-        bool singleQmarks = false
+        string exArgs
     ) : base(
         ReferenceToolSetting.ripgrepPath
     )
@@ -29,13 +27,13 @@ internal class RgArgumentsInfo : ArgumentsInfo
         this.pattern = pattern;
         this.workDir = workDir;
         this.exArgs = exArgs;
-        if (singleQmarks)
+        if (UToolsUtil.IsMac)
         {
             args = $"\'{pattern}\' \'{workDir}\' {exArgs}";
         }
         else
         {
-            args = $"\"{pattern}\" \'{workDir}\' {exArgs}";
+            args = $"\"{pattern}\" \"{workDir}\" {exArgs}";
         }
     }
 
