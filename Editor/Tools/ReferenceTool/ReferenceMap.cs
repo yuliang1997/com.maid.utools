@@ -8,8 +8,8 @@ using UTools.Utility;
 [Serializable]
 internal class MapPair
 {
-    internal string key;
-    internal List<string> values;
+    public string key;
+    public List<string> values;
 
     internal MapPair(string key, List<string> values)
     {
@@ -21,7 +21,7 @@ internal class MapPair
 [Serializable]
 internal struct ReferenceMapData
 {
-    internal List<MapPair> pairs;
+    public List<MapPair> pairs;
 }
 
 internal class ReferenceMap
@@ -41,8 +41,15 @@ internal class ReferenceMap
         dataPath = path;
         if (File.Exists(dataPath))
         {
-            ReferenceMapData data = JsonUtility.FromJson<ReferenceMapData>(File.ReadAllText(dataPath));
-            mapDic = data.pairs.ToDictionary(v => v.key, v => v.values);
+            try
+            {
+                ReferenceMapData data = JsonUtility.FromJson<ReferenceMapData>(File.ReadAllText(dataPath));
+                mapDic = data.pairs.ToDictionary(v => v.key, v => v.values);
+            }
+            catch (Exception)
+            {
+                File.Delete(dataPath);
+            }
         }
     }
 
@@ -82,6 +89,8 @@ internal class ReferenceMap
             v.values = v.values.Distinct().ToList();
         }
 
-        File.WriteAllText(dataPath, JsonUtility.ToJson(data));
+        var json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(dataPath, json);
     }
 }

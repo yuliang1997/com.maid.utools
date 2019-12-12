@@ -254,8 +254,8 @@ internal class BookmarkTool : EditorWindow
     [Serializable]
     internal class Bookmark
     {
-        internal string path;
-        internal string name;
+        public string path;
+        public string name;
 
         internal Bookmark(string path)
         {
@@ -267,13 +267,13 @@ internal class BookmarkTool : EditorWindow
     [Serializable]
     internal class History
     {
-        internal string guid;
-        internal string fileName;
-        internal Object asset;
+        public string guid;
+        public string fileName;
+        public Object asset;
 
         [NonSerialized] private Type assetType;
 
-        internal Type AssetType
+        public Type AssetType
         {
             get
             {

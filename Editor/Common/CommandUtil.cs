@@ -8,14 +8,12 @@ namespace UTools.Utility
 {
     internal static class CommandUtil
     {
-        #region Methods
-
         internal static void ExecuteCommand(
             ArgumentsInfo info,
             Action<List<string>> callback
         )
         {
-//            Debug.LogWarning($"CMD:{info.binpath} {info.args}");
+//            Debug.LogWarning($"{info.binpath} {info.args}");
 
             var results = new List<string>();
 
@@ -93,26 +91,16 @@ namespace UTools.Utility
 
             process.Close();
         }
-
-        #endregion
     }
 
     internal class ArgumentsInfo
     {
-        #region Fields
-
         internal string args;
         internal string binpath;
-
-        #endregion
-
-        #region Methods
 
         internal ArgumentsInfo(string binpath) => this.binpath = binpath;
 
         internal void AddArgs(string arg) => args = $"{args} {arg}";
         internal void InsertArgs(string arg) => args = $"{arg} {args}";
-
-        #endregion
     }
 }

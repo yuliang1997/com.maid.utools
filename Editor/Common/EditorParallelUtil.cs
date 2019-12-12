@@ -56,9 +56,9 @@ namespace UTools.Utility
 
                 if (done)
                 {
-                    work.doneCallback?.Invoke();
                     works.RemoveAt(i);
                     i--;
+                    work.doneCallback?.Invoke();
                 }
             }
         }

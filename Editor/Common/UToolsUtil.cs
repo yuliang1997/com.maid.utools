@@ -292,7 +292,8 @@ internal static class UToolsUtil
         return (null, 0);
     }
 
-    internal static Object GetAssetByGUID(string guid, Type type) => AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guid), type);
+    internal static Object GetAssetByGUID(string guid, Type type) =>
+        AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guid), type);
 
     internal static T GetAssetByGUID<T>(string guid) where T : Object => (T) GetAssetByGUID(guid, typeof(T));
 

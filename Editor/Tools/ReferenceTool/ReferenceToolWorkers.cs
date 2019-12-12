@@ -113,15 +113,16 @@ internal class GUIDMapGen : MapGen
         var info = new RgArgumentsInfo(
             ReferenceToolUtil.refRegexString,
             searchFolder,
-            "--heading -s -N -o -g '!*GUIDMap.asset'"
+//            ""
+            "--heading -s -N -o"
         );
 
         foreach (var v in ReferenceToolUtil.guidMapHandleExs)
         {
-            info.InsertArgs($"-g '*{v}'");
+            info.AddArgs($"-g '*{v}'");
         }
-
-        info.AddArgs(rgoption);
+//
+//        info.AddArgs(rgoption);
 
         CommandUtil.ExecuteCommand(
             info,
@@ -162,14 +163,14 @@ internal class GUIDMapGen : MapGen
 [Serializable]
 internal class ReferenceToolBase : ReferenceToolWork
 {
-    internal string curFindString;
-    internal List<UFileInfo> findResult = new List<UFileInfo>();
+    public string curFindString;
+    public List<UFileInfo> findResult = new List<UFileInfo>();
 
-    internal List<ReplaceInfo> replaceResult = new List<ReplaceInfo>();
+    public List<ReplaceInfo> replaceResult = new List<ReplaceInfo>();
 //        internal Dictionary<string, ReplaceInfo> replaceResult =
 //            new Dictionary<string, ReplaceInfo>();
 
-    internal string replaceTargetString;
+    public string replaceTargetString;
 
     internal void EnsureReplaceToStr(string replaceTargetString) => this.replaceTargetString = replaceTargetString;
 

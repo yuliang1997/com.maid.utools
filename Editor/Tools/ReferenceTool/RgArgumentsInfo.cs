@@ -29,7 +29,7 @@ internal class RgArgumentsInfo : ArgumentsInfo
         this.exArgs = exArgs;
         if (UToolsUtil.IsMac)
         {
-            args = $"\'{pattern}\' \'{workDir}\' {exArgs}";
+            args = $"\"{pattern}\" \"{workDir}\" {exArgs}";
         }
         else
         {
