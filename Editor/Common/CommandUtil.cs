@@ -1,17 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
+using UnityEditor;
 using Debug = UnityEngine.Debug;
 
 namespace UTools.Utility
 {
     internal static class CommandUtil
     {
-        internal static void ExecuteCommand(
-            ArgumentsInfo info,
-            Action<List<string>> callback
-        )
+        internal static void ExecuteRG(string args, Action<List<string>> callback)
+        {
+            string fileName = EditorPrefs.GetString("ripgrep_path", "");
+            if (string.IsNullOrEmpty(fileName))
+            {
+                if (UToolsUtil.IsMac)
+                {
+                    fileName = "/usr/local/bin/rg";
+                }
+                else
+                {
+                    fileName = UToolsSetting.depPath + "/rg.exe";
+                }
+            }
+
+            if (!File.Exists(fileName))
+            {
+                fileName = EditorUtility.OpenFilePanel("Open Ripgrep", UToolsSetting.depPath, "*");
+                EditorPrefs.SetString("ripgrep_path", fileName);
+            }
+
+            ExecuteCommand(fileName, args, callback);
+        }
+
+        internal static void ExecuteCommand(string fileName, string args, Action<List<string>> callback)
         {
 //            Debug.LogWarning($"{info.binpath} {info.args}");
 
@@ -21,8 +44,8 @@ namespace UTools.Utility
             {
                 var psi = new ProcessStartInfo();
                 psi.WindowStyle = ProcessWindowStyle.Maximized;
-                psi.FileName = info.binpath;
-                psi.Arguments = info.args;
+                psi.FileName = fileName;
+                psi.Arguments = args;
                 psi.UseShellExecute = false;
                 psi.RedirectStandardOutput = true;
                 psi.RedirectStandardError = true;
@@ -63,44 +86,17 @@ namespace UTools.Utility
                 {
                     Debug.LogError(errorsb);
                 }
+
+                process.Close();
             }
 
-            void AllDoneCallback() => callback?.Invoke(results);
+            void AllDoneCallback()
+            {
+                Debug.LogWarning($"Results.Count:{results.Count}");
+                callback?.Invoke(results);
+            }
 
             EditorParallelUtil.RunThread(AllDoneCallback, WorkAction);
         }
-
-        internal static void ExcuteApp(
-            string appName,
-            string argument = null,
-            bool createNoWindow = false,
-            string workingDirectory = null
-        )
-        {
-            var info = new ProcessStartInfo(appName);
-            info.Arguments = argument;
-            info.CreateNoWindow = createNoWindow;
-            info.ErrorDialog = true;
-            info.UseShellExecute = true;
-
-            info.WorkingDirectory = workingDirectory;
-
-            var process = Process.Start(info);
-
-            process.WaitForExit();
-
-            process.Close();
-        }
-    }
-
-    internal class ArgumentsInfo
-    {
-        internal string args;
-        internal string binpath;
-
-        internal ArgumentsInfo(string binpath) => this.binpath = binpath;
-
-        internal void AddArgs(string arg) => args = $"{args} {arg}";
-        internal void InsertArgs(string arg) => args = $"{arg} {args}";
     }
 }

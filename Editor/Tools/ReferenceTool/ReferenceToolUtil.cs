@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
-
 internal static class ReferenceToolUtil
 {
     internal static string GetContent(string path) => File.ReadAllText(path);

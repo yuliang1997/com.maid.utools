@@ -110,22 +110,17 @@ internal class GUIDMapGen : MapGen
 
         map.clear();
 
-        var info = new RgArgumentsInfo(
-            ReferenceToolUtil.refRegexString,
-            searchFolder,
-//            ""
-            "--heading -s -N -o"
-        );
+        string args = $"\"{ReferenceToolUtil.refRegexString}\" \"{searchFolder}\" --heading -s -N -o";
 
         foreach (var v in ReferenceToolUtil.guidMapHandleExs)
         {
-            info.AddArgs($"-g '*{v}'");
+            args += $" -g \"*{v}\"";
         }
-//
-//        info.AddArgs(rgoption);
 
-        CommandUtil.ExecuteCommand(
-            info,
+        args += rgoption;
+
+        CommandUtil.ExecuteRG(
+            args,
             results =>
             {
                 var tempMap = new Dictionary<string, List<string>>();
@@ -433,9 +428,8 @@ internal class ReferenceToolString : ReferenceToolBase
 
         BeginWork("FindString");
 
-        var argsInfo = new RgArgumentsInfo(str, "-l -s -F " + rgoption);
-        CommandUtil.ExecuteCommand(
-            argsInfo,
+        CommandUtil.ExecuteRG(
+            str + " -l -s -F " + rgoption,
             results =>
             {
                 AddFindResult(
