@@ -8,20 +8,18 @@
 ### 依赖
 - Unity 2019.1或者更高
 - [ripgrep](https://github.com/BurntSushi/ripgrep) (只有ReferenceTool需要，并且已经自带Windows版本，如果你是其他系统，需要自己安装ripgrep，并且放到 **/usr/local/bin/rg** 目录)
-- [UTools.Utility](https://github.com/yuliang1997/UTools.Utility) 一些实用性的工具函数和扩展函数
 
 ### 使用方法
 
 ```json
 {
   "dependencies": {
-    "com.maid.utools.utility": "https://github.com/yuliang1997/UTools.Utility.git",
     "com.maid.utools": "https://github.com/yuliang1997/UTools.git",
     ...
   },
 }
 ```
-1. 在你的 **{unity项目目录}/Packages/manifest.json** 文件里插入上述两行
+1. 在你的 **{unity项目目录}/Packages/manifest.json** 文件里插入上述一行
 2. 回到Unity，等待进度条结束
 3. unity菜单栏Windows/UTools/...
 -----------
