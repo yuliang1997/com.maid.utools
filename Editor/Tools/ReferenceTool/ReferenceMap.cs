@@ -5,92 +5,95 @@ using System.Linq;
 using UnityEngine;
 using UTools.Utility;
 
-[Serializable]
-internal class MapPair
+namespace UTools
 {
-    public string key;
-    public List<string> values;
-
-    internal MapPair(string key, List<string> values)
+    [Serializable]
+    internal class MapPair
     {
-        this.key = key;
-        this.values = values;
-    }
-}
+        public string key;
+        public List<string> values;
 
-[Serializable]
-internal struct ReferenceMapData
-{
-    public List<MapPair> pairs;
-}
-
-internal class ReferenceMap
-{
-    internal Dictionary<string, List<string>> mapDic = new Dictionary<string, List<string>>();
-    internal string dataPath;
-
-    private static readonly object lockObj = new object();
-
-    internal ReferenceMap(string path)
-    {
-        loadFromPath(path);
-    }
-
-    internal void loadFromPath(string path)
-    {
-        dataPath = path;
-        if (File.Exists(dataPath))
+        internal MapPair(string key, List<string> values)
         {
-            try
+            this.key = key;
+            this.values = values;
+        }
+    }
+
+    [Serializable]
+    internal struct ReferenceMapData
+    {
+        public List<MapPair> pairs;
+    }
+
+    internal class ReferenceMap
+    {
+        internal Dictionary<string, List<string>> mapDic = new Dictionary<string, List<string>>();
+        internal string dataPath;
+
+        private static readonly object lockObj = new object();
+
+        internal ReferenceMap(string path)
+        {
+            loadFromPath(path);
+        }
+
+        internal void loadFromPath(string path)
+        {
+            dataPath = path;
+            if (File.Exists(dataPath))
             {
-                ReferenceMapData data = JsonUtility.FromJson<ReferenceMapData>(File.ReadAllText(dataPath));
-                mapDic = data.pairs.ToDictionary(v => v.key, v => v.values);
+                try
+                {
+                    ReferenceMapData data = JsonUtility.FromJson<ReferenceMapData>(File.ReadAllText(dataPath));
+                    mapDic = data.pairs.ToDictionary(v => v.key, v => v.values);
+                }
+                catch (Exception)
+                {
+                    File.Delete(dataPath);
+                }
             }
-            catch (Exception)
+        }
+
+        internal void clear()
+        {
+            mapDic.Clear();
+        }
+
+        internal void remove(string key)
+        {
+            lock (lockObj)
             {
-                File.Delete(dataPath);
+                mapDic.Remove(key);
             }
         }
-    }
 
-    internal void clear()
-    {
-        mapDic.Clear();
-    }
-
-    internal void remove(string key)
-    {
-        lock (lockObj)
+        internal void update(string key, List<string> values)
         {
-            mapDic.Remove(key);
-        }
-    }
-
-    internal void update(string key, List<string> values)
-    {
-        lock (lockObj)
-        {
-            mapDic[key] = values;
-        }
-    }
-
-    internal void update(Dictionary<string, List<string>> mapDic)
-    {
-        this.mapDic = mapDic;
-    }
-
-    internal void writeToDisk()
-    {
-        ReferenceMapData data = new ReferenceMapData();
-        data.pairs = mapDic.SelectL(v => new MapPair(v.Key, v.Value));
-
-        foreach (var v in data.pairs)
-        {
-            v.values = v.values.Distinct().ToList();
+            lock (lockObj)
+            {
+                mapDic[key] = values;
+            }
         }
 
-        var json = JsonUtility.ToJson(data);
+        internal void update(Dictionary<string, List<string>> mapDic)
+        {
+            this.mapDic = mapDic;
+        }
 
-        File.WriteAllText(dataPath, json);
+        internal void writeToDisk()
+        {
+            ReferenceMapData data = new ReferenceMapData();
+            data.pairs = mapDic.SelectL(v => new MapPair(v.Key, v.Value));
+
+            foreach (var v in data.pairs)
+            {
+                v.values = v.values.Distinct().ToList();
+            }
+
+            var json = JsonUtility.ToJson(data);
+
+            File.WriteAllText(dataPath, json);
+        }
     }
 }

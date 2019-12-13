@@ -1,9 +1,12 @@
-﻿internal class ReferenceToolSetting
+﻿namespace UTools
 {
-    internal static string assetChangeLogPath => UToolsSetting.dataPath + "/assetChangeLogPath.txt";
-    internal static string guidMapPath => UToolsSetting.dataPath + "/guidMap.json";
-
-    internal static void Initialize()
+    internal class ReferenceToolSetting
     {
+        internal static string assetChangeLogPath => UToolsSetting.dataPath + "/assetChangeLogPath.txt";
+        internal static string guidMapPath => UToolsSetting.dataPath + "/guidMap.json";
+
+        internal static void Initialize()
+        {
+        }
     }
 }
