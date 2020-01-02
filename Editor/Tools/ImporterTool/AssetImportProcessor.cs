@@ -30,6 +30,11 @@ namespace UTools
             string[] movedFromAssetPaths
         )
         {
+            if (!its)
+            {
+                return;
+            }
+
             if (its.reimportMovedAsset)
             {
                 foreach (var v in movedAssets)
@@ -41,6 +46,11 @@ namespace UTools
 
         private void OnPreprocessAsset()
         {
+            if (!its)
+            {
+                return;
+            }
+
             if (its.enableBundleNameControl)
             {
                 if (its.removeUnusedBundleNameWhenImport)
@@ -57,6 +67,11 @@ namespace UTools
 
         private void OnPreprocessTexture()
         {
+            if (!its)
+            {
+                return;
+            }
+
             if (its.enableTexureFormatControl)
             {
                 handleTexFormat();

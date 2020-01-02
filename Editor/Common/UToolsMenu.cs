@@ -27,7 +27,7 @@ namespace UTools
             UToolsUtil.CreateAssetInSelectionPath<AssetImportSetting>("AssetImportSetting");
 
         [MenuItem("Assets/Create/UTools/ImportToolSetting", priority = 1)]
-        internal static void createImportToolSetting() => ImportToolSetting.create();
+        internal static void createImportToolSetting() => ImportToolSetting.ensureInstExist();
 
         private static T openWindow<T>() where T : EditorWindow
         {

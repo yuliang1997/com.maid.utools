@@ -27,19 +27,19 @@ public class ImportToolSetting : ScriptableObject
             if (!_inst)
             {
                 _inst = AssetDatabase.LoadAssetAtPath<ImportToolSetting>(assetPath);
-                if (!_inst)
-                {
-                    create();
-                }
             }
 
             return _inst;
         }
     }
 
-    public static void create()
+    public static void ensureInstExist()
     {
-        var temp = inst;
+        _inst = AssetDatabase.LoadAssetAtPath<ImportToolSetting>(assetPath);
+        if (!_inst)
+        {
+            _inst = UToolsUtil.CreateAsset<ImportToolSetting>(assetPath);
+        }
     }
 
     ///////////////////////
