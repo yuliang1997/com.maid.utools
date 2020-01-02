@@ -7,53 +7,6 @@ namespace UTools
 {
     public class TexImporterSetting : ScriptableObject
     {
-        public enum AlphaMode
-        {
-            Auto,
-            Alpha,
-            NoAlpha
-        }
-
-        public enum PresetSettings
-        {
-            None,
-            Texture_Scene,
-            Texture_UI,
-            Sprite_UI
-        }
-
-        public enum AtlasMode
-        {
-            None = 4,
-            RelativeFolder = 0,
-            ParentFolder = 1,
-            Custom = 2,
-            CurrentFolder = 3,
-        }
-
-        public enum QualityMode
-        {
-            Fast = 0,
-            Normal = 50,
-            Best = 100
-        }
-
-        public enum SpecialFilterContent
-        {
-            FileName,
-            Path,
-            ParentFolderName,
-        }
-
-        public enum SpecialFilterMode
-        {
-            Regex,
-            Contain,
-            Equals,
-            StartWith,
-            EndWith
-        }
-
         public bool ApplyDefaultSettings = true;
         public Settings ImporterSettings;
 
@@ -95,8 +48,8 @@ namespace UTools
         public class SpecialItem
         {
             public string FilterContent;
-            public SpecialFilterContent FilterContentType;
-            public SpecialFilterMode FilterMode;
+            public ConditionContent FilterContentType;
+            public ConditionMethod FilterMode;
             public bool IgnoreCase;
             public Settings Setting = new Settings();
         }

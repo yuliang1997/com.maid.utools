@@ -20,7 +20,14 @@ namespace UTools
 
         [MenuItem("Assets/Create/UTools/TexImportSettings", priority = 1)]
         internal static void createTextureImporterSetting() =>
-            UToolsUtil.CreateAssetInSelectionPath<TexImporterSetting>("TexMaidImporterSetting");
+            UToolsUtil.CreateAssetInSelectionPath<TexImporterSetting>("TexImporterSetting");
+
+        [MenuItem("Assets/Create/UTools/AssetImportSetting", priority = 1)]
+        internal static void createImportSetting() =>
+            UToolsUtil.CreateAssetInSelectionPath<AssetImportSetting>("AssetImportSetting");
+
+        [MenuItem("Assets/Create/UTools/ImportToolSetting", priority = 1)]
+        internal static void createImportToolSetting() => ImportToolSetting.create();
 
         private static T openWindow<T>() where T : EditorWindow
         {

@@ -19,6 +19,9 @@ namespace UTools
 
 #if !DISABLE_TEXTOOL
 
+    /// <summary>
+    /// 已弃用，使用AssetImportSetting
+    /// </summary>
     internal class TexImportProcessor : AssetPostprocessor
     {
         private static Dictionary<string, TexImporterSetting> settingsCache =
@@ -93,14 +96,14 @@ namespace UTools
 
             TextureImporterFormat iosFormat = 0, androidFormat = 0, pcFormat = 0;
 
-            if (setting.AlphaMode != TexImporterSetting.AlphaMode.Auto)
+            if (setting.AlphaMode != AlphaMode.Auto)
             {
                 iosFormat = setting.OverrideIOSFormat;
                 androidFormat = setting.OverrideAndroidFormat;
                 pcFormat = setting.OverridePCFormat;
                 importer.alphaIsTransparency =
                     setting.AlphaIsTransparency &&
-                    setting.AlphaMode == TexImporterSetting.AlphaMode.Alpha;
+                    setting.AlphaMode == AlphaMode.Alpha;
                 if ((int) iosFormat == 51)
                 {
                     iosFormat = TextureImporterFormat.ASTC_8x8;
@@ -182,13 +185,13 @@ namespace UTools
                 var matchStr = string.Empty;
                 switch (specialItem.FilterContentType)
                 {
-                    case TexImporterSetting.SpecialFilterContent.FileName:
+                    case ConditionContent.FileName:
                         matchStr = fileName;
                         break;
-                    case TexImporterSetting.SpecialFilterContent.Path:
+                    case ConditionContent.Path:
                         matchStr = assetPath;
                         break;
-                    case TexImporterSetting.SpecialFilterContent.ParentFolderName:
+                    case ConditionContent.ParentFolderName:
                         matchStr = Path.GetFileName(Path.GetDirectoryName(assetPath));
                         break;
                 }
@@ -226,18 +229,18 @@ namespace UTools
 
             switch (specialItem.FilterMode)
             {
-                case TexImporterSetting.SpecialFilterMode.Regex:
+                case ConditionMethod.Regex:
                     return Regex.IsMatch(
                         importerName,
                         filterContent
                     );
-                case TexImporterSetting.SpecialFilterMode.Contain:
+                case ConditionMethod.Contain:
                     return importerName.Contains(filterContent);
-                case TexImporterSetting.SpecialFilterMode.Equals:
+                case ConditionMethod.Equals:
                     return importerName.Equals(filterContent);
-                case TexImporterSetting.SpecialFilterMode.StartWith:
+                case ConditionMethod.StartWith:
                     return importerName.StartsWith(filterContent);
-                case TexImporterSetting.SpecialFilterMode.EndWith:
+                case ConditionMethod.EndWith:
                     return importerName.EndsWith(filterContent);
             }
 
@@ -270,7 +273,7 @@ namespace UTools
                 }
             }
 
-            var asset = UToolsUtil.FindScriptableObject<TexImporterSetting>(dirPath, false);
+            var asset = UToolsUtil.FindScriptableObject<TexImporterSetting>("TexImporterSetting", dirPath, false);
 
             if (asset != null)
             {
@@ -312,7 +315,7 @@ namespace UTools
             string name,
             TextureImporterFormat format,
             int maxSize,
-            TexImporterSetting.QualityMode quality
+            QualityMode quality
         )
         {
             var setting = new TextureImporterPlatformSettings();
@@ -326,14 +329,14 @@ namespace UTools
 
         private static void TrySetPackingTag(
             TextureImporter importer,
-            TexImporterSetting.AtlasMode mode,
+            AtlasMode mode,
             string packingTag,
             string assetPath,
             string settingDir
         )
         {
             if (importer.textureType != TextureImporterType.Sprite ||
-                mode == TexImporterSetting.AtlasMode.None)
+                mode == AtlasMode.None)
             {
                 importer.spritePackingTag = "";
                 return;
@@ -341,7 +344,7 @@ namespace UTools
 
             switch (mode)
             {
-                case TexImporterSetting.AtlasMode.RelativeFolder:
+                case AtlasMode.RelativeFolder:
                 {
                     var relativePath = assetPath.Substring(settingDir.Length);
                     if (relativePath.StartsWith("/"))
@@ -362,7 +365,7 @@ namespace UTools
                     break;
                 }
 
-                case TexImporterSetting.AtlasMode.ParentFolder:
+                case AtlasMode.ParentFolder:
                 {
                     var dirPath = Path.GetDirectoryName(assetPath);
                     var dirName = Path.GetFileName(dirPath);
@@ -370,7 +373,7 @@ namespace UTools
                     break;
                 }
 
-                case TexImporterSetting.AtlasMode.CurrentFolder:
+                case AtlasMode.CurrentFolder:
                     packingTag = Path.GetFileName(settingDir);
                     break;
             }

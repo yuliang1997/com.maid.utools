@@ -339,9 +339,9 @@ internal static class UToolsUtil
         return results;
     }
 
-    internal static T FindScriptableObject<T>(string relativePath, bool recursive) where T : ScriptableObject
+    internal static T FindScriptableObject<T>(string name, string relativePath, bool recursive) where T : ScriptableObject
     {
-        var paths = FindAssetsPath("TexImporterSetting", relativePath, recursive);
+        var paths = FindAssetsPath(name, relativePath, recursive);
 
         foreach (var path in paths)
         {

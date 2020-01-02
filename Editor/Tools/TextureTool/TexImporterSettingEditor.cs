@@ -88,22 +88,6 @@ namespace UTools
                     var tmis = (TexImporterSetting) targets[j];
                     var dir = UToolsUtil.GetAssetDir(tmis);
                     var paths = UToolsUtil.FindAssetsPath("t:Texture2D", dir, tmis.IncludeChild);
-                    if (!tmis.ApplyDefaultSettings)
-                    {
-                        paths.RemoveAll(
-                            v =>
-                            {
-                                var setting = TexImportProcessor.GetSettings(tmis, v);
-                                if (setting == null)
-                                {
-                                    return true;
-                                }
-
-                                return false;
-                            }
-                        );
-                    }
-
                     allPaths.AddRange(paths);
                 }
 
@@ -252,7 +236,7 @@ namespace UTools
                 setting.PresetSetting = UTGUI.Enum("Preset: ", setting.PresetSetting);
 
                 var haspreset =
-                    setting.PresetSetting != TexImporterSetting.PresetSettings.None;
+                    setting.PresetSetting != PresetSettings.None;
                 EditorGUI.BeginDisabledGroup(haspreset);
 
                 setting.TextureType = UTGUI.Enum("TexType: ", setting.TextureType);
@@ -271,7 +255,7 @@ namespace UTools
                 );
                 setting.WrapMode = UTGUI.Enum("Wrap", setting.WrapMode);
 
-                if (setting.AlphaMode != TexImporterSetting.AlphaMode.Auto)
+                if (setting.AlphaMode != AlphaMode.Auto)
                 {
                     setting.OverrideAndroidFormat = UTGUI.Enum(
                         "Android",
@@ -298,7 +282,7 @@ namespace UTools
                 EditorGUI.BeginDisabledGroup(setting.TextureType != TextureImporterType.Sprite);
 
                 setting.AtlasMode = UTGUI.Enum("AtlasMode: ", setting.AtlasMode);
-                if (setting.AtlasMode == TexImporterSetting.AtlasMode.Custom)
+                if (setting.AtlasMode == AtlasMode.Custom)
                 {
                     setting.PackingTag = UTGUI.Text("Atlas: ", setting.PackingTag);
                 }
@@ -333,21 +317,21 @@ namespace UTools
         {
             switch (setting.PresetSetting)
             {
-                case TexImporterSetting.PresetSettings.Texture_Scene:
+                case PresetSettings.Texture_Scene:
                     setting.TextureType = TextureImporterType.Default;
                     setting.WrapMode = TextureWrapMode.Repeat;
                     setting.MipMapEnable = true;
                     setting.TextureShape = TextureImporterShape.Texture2D;
                     setting.AlphaIsTransparency = false;
                     break;
-                case TexImporterSetting.PresetSettings.Texture_UI:
+                case PresetSettings.Texture_UI:
                     setting.TextureType = TextureImporterType.Default;
                     setting.WrapMode = TextureWrapMode.Clamp;
                     setting.MipMapEnable = false;
                     setting.TextureShape = TextureImporterShape.Texture2D;
                     setting.AlphaIsTransparency = true;
                     break;
-                case TexImporterSetting.PresetSettings.Sprite_UI:
+                case PresetSettings.Sprite_UI:
                     setting.TextureType = TextureImporterType.Sprite;
                     setting.WrapMode = TextureWrapMode.Clamp;
                     setting.MipMapEnable = false;
@@ -357,9 +341,9 @@ namespace UTools
             }
 
 
-            if (setting.AlphaMode != TexImporterSetting.AlphaMode.Auto)
+            if (setting.AlphaMode != AlphaMode.Auto)
             {
-                var hasAlpha = setting.AlphaMode == TexImporterSetting.AlphaMode.Alpha;
+                var hasAlpha = setting.AlphaMode == AlphaMode.Alpha;
                 setting.OverrideAndroidFormat = TextureToolUtil.GetFormat(RuntimePlatform.Android, hasAlpha);
                 setting.OverrideIOSFormat = TextureToolUtil.GetFormat(RuntimePlatform.IPhonePlayer, hasAlpha);
                 setting.OverridePCFormat = TextureToolUtil.GetFormat(RuntimePlatform.WindowsPlayer, hasAlpha);
